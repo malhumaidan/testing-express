@@ -13,7 +13,9 @@ accountsRouter.delete('/:accountId',accountsController.deleteAccount);
 
 accountsRouter.put('/:accountId',accountsController.updateAccount);
 
-accountsRouter.get('/:accountId',accountsController.getAccount);
+// accountsRouter.get('/:accountId',accountsController.getAccount);
+
+accountsRouter.get('/:username',accountsController.getAccountByUsername);
 
 
 

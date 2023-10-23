@@ -46,4 +46,13 @@ function getAccount(req,res) {
     res.status(200).json(account);
 }
 
-module.exports = {getAllAccounts, addAccount, deleteAccount, updateAccount, getAccount}
+function getAccountByUsername(req,res) {
+    const username = req.params.username;
+    const currency = req.query.currency;
+    const account = accounts.find((acc)=> acc.username == username);
+    if(!account) return res.status(404).json({message: "username not found"})
+    if(currency == "usd") account.fundsInUSD = account.funds * 3.33;
+    res.status(200).json(account);
+}
+
+module.exports = {getAllAccounts, addAccount, deleteAccount, updateAccount, getAccount,getAccountByUsername}
