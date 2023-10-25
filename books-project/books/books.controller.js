@@ -33,4 +33,11 @@ const updateBook = async (req,res)=>{
     return res.status(204).json(book);
 }
 
-module.exports = {getAllBooks, getBookById, createBook, updateBook}
+const deleteBook = async (req,res)=>{
+    const { bookId } = req.params;
+    const book = await Book.findByIdAndDelete(bookId);
+
+    return res.status(204).json(book);
+}
+
+module.exports = {getAllBooks, getBookById, createBook, updateBook, deleteBook}
