@@ -1,19 +1,26 @@
-const accounts = require("../../accounts");
+const Account = require("../models/Account")
 
 
-function getAllAccounts(req,res){
+async function getAllAccounts(req,res){
+
+    const accounts = await Account.find()
     res.status(200).json(accounts);
 }
 
-function addAccount(req,res){
+async function addAccount(req,res){
 
-    const generatedId = accounts.length + 1
-    const newAcc = {
-        "id": generatedId,
-        ...req.body
-    }
-    accounts.push(newAcc);
-    res.status(200).json(accounts);
+    const account = await Account.create({
+        username: req.body.username,
+        funds: 0
+    })
+
+    // const generatedId = accounts.length + 1
+    // const newAcc = {
+    //     "id": generatedId,
+    //     ...req.body
+    // }
+    // accounts.push(newAcc);
+    res.status(200).json(account);
 }
 
 function deleteAccount(req,res){
@@ -42,7 +49,7 @@ function updateAccount(req,res){
 function getAccount(req,res) {
     const id = req.params.accountId;
     const account = accounts.find((a)=> a.id == id);
-    if(!account) return res.status(404).json({message: "not found"})
+    if(!account) return res.status(404).json({message: "not found"});
     res.status(200).json(account);
 }
 
@@ -50,8 +57,8 @@ function getAccountByUsername(req,res) {
     const username = req.params.username;
     const currency = req.query.currency;
     const account = accounts.find((acc)=> acc.username == username);
-    if(!account) return res.status(404).json({message: "username not found"})
-    if(currency == "usd") account.fundsInUSD = account.funds * 3.33;
+    if(!account) return res.status(404).json({message: "username not found"});
+    if(currency && currency.toLowerCase() == "usd") account.fundsInUSD = account.funds * 3.33;
     res.status(200).json(account);
 }
 
