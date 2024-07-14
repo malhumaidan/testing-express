@@ -6,21 +6,31 @@ const getAllBooks = async (req,res)=>{
     return res.status(200).json(books);
 }
 
-const getBookById = async (req,res)=>{
+const getBookById = async (req,res,next)=>{
+
     const { bookId } = req.params;
-    const book = await Book.findById(bookId);
-    return res.status(200).json(book);
+    try {
+        console.log(bookId.length)
+        const book = await Book.findById(bookId);
+        if(book) return res.status(200).json(book);
+        const err = new Error('Ga3ed t2alif id 9a7 ??');
+        err.status = 'akeed fail';
+        err.statusCode = 404;
+        next(err);
+    } catch (error) {
+        next(error);
+    }
 }
 
 const createBook = async (req,res)=>{
-    const { title, author, price, image } = req.body;
-    if(!title) return json({message: 'please enter a title'})
-    if(!author) return json({message: 'please enter a author name'})
+    const { title, author, price } = req.body;
+    if(!title) return json({message: 'please enter a title'});
+    if(!author) return json({message: 'please enter a author name'});
     const book = await Book.create({
         title: title,
         author:author,
         price: price ?? 5,
-        image: image ?? 'https://www.roxannetroup.com/uploads/4/8/1/4/48144785/coming-f-24-nobkgd.png'
+        image: req.file.path 
     });
     return res.status(201).json(book);
 }
